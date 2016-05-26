@@ -1,0 +1,17 @@
+{% extends "shop/base.html" %}
+{% load static %}
+
+{% block title %}
+    {% if category %}{{ category.title }}{% else %}Run{% endif %}
+{% endblock %}
+
+{% block content %}
+    <div class="product-detail">
+        <h1>Name: {{ run.name }}</h1>
+        <h2>Train Data View: {{ run.train_dv }}</h2>
+        <p>Test Data View: {{ run.test_dv }}</p>
+        <p>Formula: {{ run.formula}}</p>
+        <p>Coefficients: {{ coeff }}</p>
+        {{ fig_html|safe }}
+    </div>
+{% endblock %}

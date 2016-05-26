@@ -1,0 +1,17 @@
+{% extends "shop/base.html" %}
+{% load static %}
+
+{% block title %}
+    {% if category %}{{ category.title }}{% else %}Data View{% endif %}
+{% endblock %}
+
+{% block content %}
+    <div class="product-detail">
+        <h1>Name: {{ dataview.name }}</h1>
+        <h2>Dataset: {{ dataview.dataset }}</h2>
+        <p>Parameters: {{ dataview.parameters }}</p>
+        <p>Row Range: {{ dataview.row_range }}</p>
+        <p>Data Code: {{ datacode }}</p>
+        <p>Values: {{ dataviewhtml|safe }}</p>
+    </div>
+{% endblock %}

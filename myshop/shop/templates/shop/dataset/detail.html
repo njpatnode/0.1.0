@@ -1,0 +1,14 @@
+{% extends "shop/base.html" %}
+{% load static %}
+
+{% block title %}
+    {% if dataset %}{{ dataset.name }}{% else %}No Dataset{% endif %}
+{% endblock %}
+
+{% block content %}
+    <div class="product-detail">
+        <h1>{{ dataset.name }}</h1>
+        <p class="price">Python Code:{{ dataset.code }}</p>
+            {{ datavalues|safe }}
+    </div>
+{% endblock %}
