@@ -52,7 +52,8 @@ class DataView(models.Model):
     dataset = models.ForeignKey(DataSet, related_name='dataviews')
     name = models.CharField(max_length=200, db_index=True)
     parameters = models.CharField(max_length=500)
-    row_range = models.CharField(max_length=200)
+    row_range_low = models.CharField(max_length=200)
+    row_range_high = models.CharField(max_length=200)
 
     def __str__(self):
         return self.name

@@ -17,8 +17,3 @@ class DataSetAdmin(admin.ModelAdmin):
     list_display = ['name', 'code']
     list_editable = ['name', 'code']
 admin.site.register(DataSet, DataSetAdmin)
-
-class DataViewAdmin(admin.ModelAdmin):
-    list_display = ['dataset', 'name', 'parameters', 'row_range']
-    list_editable = ['dataset', 'name', 'parameters', 'row_range']
-admin.site.register(DataView, DataViewAdmin)

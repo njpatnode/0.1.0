@@ -48,7 +48,8 @@ def dataview_detail(request, name):
     datavalues = pd.concat([inputs, outputs], axis=1)
     datavalues.columns = ['Age', 'Sex', 'Body Mass Index', 'Average Blood Pressure', 'S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'Target']
     column_filter = dataview.parameters
-    row_range = dataview.row_range
+    row_range_low = dataview.row_range_low
+    row_range_high = dataview.row_range_high
     datavalues = datavalues[eval(column_filter)]
     dataviewhtml = datavalues.to_html()
     return render(request, 'shop/product/detail.html', {'dataview': dataview, 'datacode': datacode, 'dataviewhtml': dataviewhtml})
@@ -122,3 +123,5 @@ def run_detail(request, name):
     #datavalues = datavalues[eval(column_filter)]
     #dataviewhtml = datavalues.to_html()
     return render(request, 'shop/product/run_detail.html', {'run': run, 'coeff': coeff, 'fig_html': fig_html})
+
+def get_df(dataset):
