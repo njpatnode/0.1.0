@@ -8,10 +8,29 @@
 {% block content %}
     <div class="product-detail">
         <h1>Name: {{ run.name }}</h1>
+        <div id="slider"></div>
+        <p>
+        <label for="amount">Donation amount ($50 increments):</label>
+        <input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
+            </p>
+            
         <h2>Train Data View: {{ run.train_dv }}</h2>
         <p>Test Data View: {{ run.test_dv }}</p>
         <p>Formula: {{ run.formula}}</p>
         <p>Coefficients: {{ coeff }}</p>
-        {{ fig_html|safe }}
+        <div>{{ fig_html|safe }}</div>
     </div>
+<script>  $(function() {
+            $( "#slider" ).slider({
+                                  value:100,
+                                  min: 0,
+                                  max: 500,
+                                  step: 50,
+                                  slide: function( event, ui ) {
+                                  $( "#amount" ).val( "$" + ui.value );
+                                  }
+                                  });
+            $( "#amount" ).val( "$" + $( "#slider" ).slider( "value" ) );
+            });
+</script>
 {% endblock %}
