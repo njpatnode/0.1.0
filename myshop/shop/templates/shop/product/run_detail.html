@@ -6,31 +6,243 @@
 {% endblock %}
 
 {% block content %}
-    <div class="product-detail">
-        <h1>Name: {{ run.name }}</h1>
-        <div id="slider"></div>
-        <p>
-        <label for="amount">Donation amount ($50 increments):</label>
-        <input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
-            </p>
-            
-        <h2>Train Data View: {{ run.train_dv }}</h2>
-        <p>Test Data View: {{ run.test_dv }}</p>
-        <p>Formula: {{ run.formula}}</p>
-        <p>Coefficients: {{ coeff }}</p>
-        <div>{{ fig_html|safe }}</div>
-    </div>
-<script>  $(function() {
+<div class="container">
+    <br>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="well">
+                <div class="form-group">
+                    <label for="sel1"><div style="border:0; color:#f6931f; font-weight:bold;">Filter</div></label>
+                    <select class="form-control" id="sel1">
+                        <option>Age</option>
+                        <option>Sex</option>
+                        <option>Body Mass Index</option>
+                        <option>Average Blood Pressure</option>
+                        <option>S1</option>
+                        <option>S2</option>
+                        <option>S3</option>
+                        <option>S4</option>
+                        <option>S5</option>
+                        <option>S6</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div id="accordion" class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a class="accordion-toggle" data-toggle="collapse" data-target="#collapseBody1">
+                            General Information
+                            <span class="fa fa-chevron-up pull-right"></span>
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseBody1" class="panel-collapse collapse in">
+                            <h1>Name: {{ run.name }}</h1>
+                            <h2>Train Data View: {{ run.train_dv }}</h2>
+                            <p>Test Data View: {{ run.test_dv }}</p>
+                            <p>Formula: {{ run.formula }}</p>
+                            <p>Coefficients: {{ coeff }}</p>
+                </div>
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a class="accordion-toggle" data-toggle="collapse" data-target="#collapseBody2">
+                            High Risk Analysis
+                            <span class="fa fa-chevron-up pull-right"></span>
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseBody2" class="panel-collapse collapse in">
+                    <div class="row">
+                        <div class="col-md-9">
+                                <div id="chart"></div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="well">
+                                <div id="stopped" style="border:0; color:#f6931f; font-weight:bold;"></div>
+                                <br>
+                                <div id="slider"></div>
+                                <br>
+                                <div id="stopped2" style="border:0; color:#f6931f; font-weight:bold;"></div>
+                                <br>
+                                <div id="slider2"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a class="accordion-toggle" data-toggle="collapse" data-target="#collapseBody3">
+                            Network Analysis
+                            <span class="fa fa-chevron-up pull-right"></span>
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseBody3" class="panel-collapse collapse in">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div id="chart"></div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="well">
+                                <div id="stopped3" style="border:0; color:#f6931f; font-weight:bold;"></div>
+                                <br>
+                                <div id="slider3"></div>
+                                <br>
+                                <div id="stopped4" style="border:0; color:#f6931f; font-weight:bold;"></div>
+                                <br>
+                                <div id="slider4"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a class="accordion-toggle" data-toggle="collapse" data-target="#collapseBody4">
+                            Correlation Analysis
+                            <span class="fa fa-chevron-up pull-right"></span>
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseBody4" class="panel-collapse collapse in">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <div id="chart4"></div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="well">
+                                <div id="stopped5" style="border:0; color:#f6931f; font-weight:bold;"></div>
+                                <br>
+                                <div id="slider5"></div>
+                                <br>
+                                <div id="stopped6" style="border:0; color:#f6931f; font-weight:bold;"></div>
+                                <br>
+                                <div id="slider6"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- end row -->
+</div>
+<script>$(function() {
             $( "#slider" ).slider({
                                   value:100,
-                                  min: 0,
-                                  max: 500,
+                                  min: 50,
+                                  max: 400,
                                   step: 50,
-                                  slide: function( event, ui ) {
-                                  $( "#amount" ).val( "$" + ui.value );
+                                  stop: function( event, ui ){
+                                  $.ajax({
+                                         url: "{% url 'shop:get_train_pct' 'test_run' %}",
+                                         data: {train_pct: $("#slider").slider("value"), risk_threshold: $("#slider2").slider("value")},
+                                         success: function(result){
+                                            $( "#stopped" ).html( "Sample Size: " + result['train_pct']);
+                                            $( "#chart" ).html( result['fig_html'] );
+                                         }
+                                         });
                                   }
                                   });
-            $( "#amount" ).val( "$" + $( "#slider" ).slider( "value" ) );
-            });
+            //set defaults
+            $("#stopped").html("Sample Size: " + $( "#slider" ).slider( "value" ));
+            $( "#slider2" ).slider({
+                                  value: 95,
+                                  min: 0,
+                                  max: 100,
+                                  step: 5,
+                                  stop: function( event, ui ){
+                                  $.ajax({
+                                         url: "{% url 'shop:get_train_pct' 'test_run' %}",
+                                         data: {train_pct: $("#slider").slider("value"), risk_threshold: $("#slider2").slider("value")},
+                                         success: function(result){
+                                         $( "#stopped2" ).html( "Risk Threshold: " + result['risk_threshold']);
+                                         $( "#chart" ).html( result['fig_html'] );
+                                         }
+                                    });
+                                  }
+                                });
+            $("#stopped2").html("Risk Threshold: " + $( "#slider2" ).slider( "value" ));
+            $( "#slider3" ).slider({
+                                   value: 95,
+                                   min: 0,
+                                   max: 100,
+                                   step: 5,
+                                   stop: function( event, ui ){
+                                   $.ajax({
+                                          url: "{% url 'shop:get_train_pct' 'test_run' %}",
+                                          data: {train_pct: $("#slider").slider("value"), risk_threshold: $("#slider2").slider("value")},
+                                          success: function(result){
+                                          $( "#stopped3" ).html( "Risk Threshold: " + result['risk_threshold']);
+                                          $( "#chart" ).html( result['fig_html'] );
+                                          }
+                                          });
+                                   }
+                                   });
+            $("#stopped3").html("Risk Threshold: " + $( "#slider3" ).slider( "value" ));
+          $( "#slider4" ).slider({
+                                 value: 95,
+                                 min: 0,
+                                 max: 100,
+                                 step: 5,
+                                 stop: function( event, ui ){
+                                 $.ajax({
+                                        url: "{% url 'shop:get_train_pct' 'test_run' %}",
+                                        data: {train_pct: $("#slider").slider("value"), risk_threshold: $("#slider2").slider("value")},
+                                        success: function(result){
+                                        $( "#stopped4" ).html( "Risk Threshold: " + result['risk_threshold']);
+                                        $( "#chart" ).html( result['fig_html'] );
+                                        }
+                                        });
+                                 }
+                                 });
+          $("#stopped4").html("Risk Threshold: " + $( "#slider4" ).slider( "value" ));
+          $( "#slider5" ).slider({
+                                 value: 95,
+                                 min: 0,
+                                 max: 100,
+                                 step: 20,
+                                 stop: function( event, ui ){
+                                 $.ajax({
+                                        url: "{% url 'shop:handle_heatmap' 'test_run' %}",
+                                        data: {train_pct: $("#slider").slider("value"), risk_threshold: $("#slider2").slider("value")},
+                                        success: function(result){
+                                        $( "#stopped5" ).html( "Risk Threshold: ");
+                                        $( "#chart4" ).html( result['heatmap_html'] );
+                                        },
+                                        error: function(result){
+                                            $( "#chart4" ).html( "There was an issue");
+                                        }
+                                        });
+                                 }
+                                 });
+          $("#stopped5").html("Risk Threshold: " + $( "#slider5" ).slider( "value" ));
+          $( "#slider6" ).slider({
+                                 value: 95,
+                                 min: 0,
+                                 max: 100,
+                                 step: 5,
+                                 stop: function( event, ui ){
+                                 $.ajax({
+                                        url: "{% url 'shop:get_train_pct' 'test_run' %}",
+                                        data: {train_pct: $("#slider").slider("value"), risk_threshold: $("#slider2").slider("value")},
+                                        success: function(result){
+                                        $( "#stopped6" ).html( "Risk Threshold: " + result['risk_threshold']);
+                                        $( "#chart4" ).html( result['heatmap_html'] );
+                                        }
+                                        });
+                                 }
+                                 });
+          $("#stopped6").html("Risk Threshold: " + $( "#slider6" ).slider( "value" ));
+                });
+</script>
+<script>
+    $(function() {
+      $( "#accordion" ).accordion({
+                                  active: false,
+                                  collapsible: true,
+                                  heightStyle: "content"
+                                  });
+});
 </script>
 {% endblock %}
