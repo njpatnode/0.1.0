@@ -314,3 +314,7 @@ ul.errorlist {
 .recommendations.cart img {
     width:120px;
 }
+
+.ui-widget { font-family: Trebuchet MS, Tahoma, Verdana,
+    Arial, sans-serif;
+    font-size: 11px}

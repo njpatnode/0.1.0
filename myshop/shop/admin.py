@@ -1,17 +1,6 @@
 from django.contrib import admin
-from .models import Category, Product, DataSet, DataView
-
-class CategoryAdmin(admin.ModelAdmin):
- list_display = ['name', 'slug']
- prepopulated_fields = {'slug': ('name',)}
-admin.site.register(Category, CategoryAdmin)
-
-class ProductAdmin(admin.ModelAdmin):
- list_display = ['name', 'slug', 'price', 'stock', 'available', 'created', 'updated']
- list_filter = ['available', 'created', 'updated']
- list_editable = ['price', 'stock', 'available']
- prepopulated_fields = {'slug': ('name',)}
-admin.site.register(Product, ProductAdmin)
+from .models import Category, Product, DataSet, DataView, DataTransformation, Analysis, Accordion, Panel, Slider, ColumnFilter, HospitalStay, Dropdown, Controller
+from import_export.admin import ImportExportModelAdmin
 
 class DataSetAdmin(admin.ModelAdmin):
     list_display = ['name', 'code']
@@ -19,6 +8,33 @@ class DataSetAdmin(admin.ModelAdmin):
 admin.site.register(DataSet, DataSetAdmin)
 
 class DataViewAdmin(admin.ModelAdmin):
-    list_display = ['dataset', 'name', 'parameters', 'row_range_low', 'row_range_high']
-    list_editable = ['dataset', 'name', 'parameters', 'row_range_low', 'row_range_high']
+    list_display = ['name', 'dataset']
+    list_editable = ['name', 'dataset']
 admin.site.register(DataView, DataViewAdmin)
+
+class DataTransformationAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(DataTransformation, DataTransformationAdmin)
+
+class AnalysisAdmin(admin.ModelAdmin):
+    list_display = ['title', 'data_view']
+    list_editable = ['title', 'data_view']
+admin.site.register(Analysis, AnalysisAdmin)
+
+class AccordionAdmin(admin.ModelAdmin):
+    fields = ['title', 'analysis']
+    list_display, list_editable = fields, fields
+admin.site.register(Accordion, AccordionAdmin)
+
+class PanelAdmin(admin.ModelAdmin):
+    list_display = ['title', 'type']
+    list_editable = ['title', 'type']
+admin.site.register(Panel, PanelAdmin)
+
+class HospitalStayAdmin(ImportExportModelAdmin):
+    pass
+admin.site.register(HospitalStay, HospitalStayAdmin)
+
+class ControllerAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(Controller, ControllerAdmin)

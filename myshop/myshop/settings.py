@@ -40,6 +40,11 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'shop',
     'jquery_ui',
+    'mptt',
+    'django_ajax',
+    'multiselectfield',
+    'import_export',
+    'django_pandas',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -58,7 +63,7 @@ ROOT_URLCONF = 'myshop.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

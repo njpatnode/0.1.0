@@ -6,13 +6,22 @@
 {% endblock %}
 
 {% block content %}
+<div class="container">
     <div class="product-detail">
-        <h1>Name: {{ dataview.name }}</h1>
-        <h2>Dataset: {{ dataview.dataset }}</h2>
-        <p>Parameters: {{ dataview.parameters }}</p>
-        <p>Row Range Low: {{ dataview.row_range_low }}</p>
-        <p>Row Range High: {{ dataview.row_range_high }}</p>
-        <p>Data Code: {{ datacode }}</p>
-        <p>Values: {{ dataviewhtml|safe }}</p>
+        <h3>Name: {{ dataview.name }}</h3>
+        <h3>Dataset: {{ dataview.dataset }}</h3>
+        <h3>Transformations:</h3>
+        {% if dataview.transformations %}
+            <ol>
+                {% for transformation in dataview.transformations.all %}
+                    <li>{{ transformation.name }}</li>
+                {% endfor %}
+            </ol>
+        {% endif %}
+        <h3>Data Types:</h3>
+        {{ datatypes|safe }}
+        <h3>Preview:</h3>
+        {{ datavalues|safe }}
     </div>
+</div>
 {% endblock %}

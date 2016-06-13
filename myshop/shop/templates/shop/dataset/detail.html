@@ -6,9 +6,10 @@
 {% endblock %}
 
 {% block content %}
+<div class="container">
     <div class="product-detail">
         <h1>{{ dataset.name }}</h1>
-        <p class="price">Python Code:{{ dataset.code }}</p>
-            {{ datavalues|safe }}
+        <p>{{ datavalues|safe }}</p>
     </div>
+</div>
 {% endblock %}
