@@ -5,7 +5,9 @@ import mpld3
 import seaborn as sns
 import numpy as np
 import pandas as pd
-import 
+from sklearn.linear_model import LogisticRegression, LinearRegression, Lasso, Ridge
+from sklearn.cross_validation import train_test_split
+from sklearn.metrics import roc_curve, auc, roc_auc_score, r2_score
 
 ### function class ####
 class result_function(object):
@@ -39,8 +41,6 @@ class result_function(object):
         return fig_html
     def lasso(self, dataview_df, x_variables, y_variable=None, test_split=0.2, alpha_value=1):
         if y_variable is not None:
-            from sklearn.linear_model import Lasso
-            import seaborn as sns
             x_variables = dataview.df[[x_variables]]
             fig, ax = plt.subplots()
             lrg = Lasso(alpha = alpha_value)
@@ -60,8 +60,6 @@ class result_function(object):
         return fig_html
     def ridge(self, dataview.df, x_variables, y_variable=None, test_split=0.2, alpha_value=1):
         if y_variable is not None:   
-            from sklearn.linear_model import Ridge
-            import seaborn as sns
             x_variables = dataview.df[[x_variables]]
             fig, ax = plt.subplots()
             rdg = Ridge(alpha = alpha_value)
@@ -81,15 +79,6 @@ class result_function(object):
         return fig_html
     def lin_reg(self, dataview.df, x_variables, y_variable=None, test_split=0.2):
         if y_variable is not None:
-            import scipy
-            from scipy import stats
-            import pandas as pd
-            import matplotlib.pyplot as plt
-            import numpy as np
-            from sklearn.linear_model import LinearRegression
-            from sklearn.cross_validation import train_test_split
-            from sklearn.metrics import r2_score
-            from sklearn import metrics
             x_variables = dataview.df[[x_variables]]
             fig, ax = plt.subplots()
             x_train, x_test, y_train, y_test = train_test_split(x_variables, dataview.df[y_variable], test_size=test_split)
@@ -109,11 +98,6 @@ class result_function(object):
         return fig_html
     def log_reg(self, dataview.df, x_variables, y_variable, test_split=0.2, weights=6):
         if y_variable is not None:
-            from sklearn import svm
-            from sklearn.linear_model import LogisticRegression
-            from sklearn.cross_validation import train_test_split
-            from sklearn.metrics import roc_curve, auc, roc_auc_score, matthews_corrcoef
-            from sklearn import metrics
             x_variables = dataview.df[[x_variables]]
             fig, ax = plt.subplots()
             x_train, x_test, y_train, y_test = train_test_split(x_variables, dataview.df[y_variable], test_size= test_split)
