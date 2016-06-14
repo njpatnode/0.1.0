@@ -28,7 +28,7 @@ class result_function(object):
             fig, ax = plt.subplots()
             x = np.array(dataview_df[x_variable])
             y = np.array(dataview_df[y_variable])
-            ax.scatter(x, y, s=dot_size)
+            ax.scatter(x, y, s=int(dot_size))
             ax.set_xlabel(x_variable)
             ax.set_ylabel(y_variable)
             ax.set_title(x_variable + 'vs.' + y_variable + 'Scatterplot')
