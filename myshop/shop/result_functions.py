@@ -21,14 +21,14 @@ class result_function(object):
         return fig_html
     def scatterplot(self, dataview_df, x_variable, y_variable, dot_size):
         f, ax = plt.subplots()
-        x = np.array(x_variable)
-        y = np.array(y_variable)
+        x = np.array(dataview_df[x_variable])
+        y = np.array(dataview_df[y_variable])
         ax.scatter(x, y)
         ax.set_xlabel(x_variable)
         ax.set_ylabel(y_variable)
         ax.set_title(x_variable + 'vs.' + y_variable + 'Scatterplot')
-        ax.set_xlim(-0.025, 1.01*max(x))
-        ax.set_ylim(-0.025, 1.01*max(y))
+        #ax.set_xlim(-0.025, 1.01*max(x))
+        #ax.set_ylim(-0.025, 1.01*max(y))
         ax.grid(True)
         fig_html = mpld3.fig_to_html(fig)
         return fig_html
