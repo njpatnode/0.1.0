@@ -19,16 +19,19 @@ class result_function(object):
         #ax.set_xlim(0, 1.01*max(x))
         fig_html = mpld3.fig_to_html(fig)
         return fig_html
-    def scatterplot(self, dataview_df, x_variable, y_variable, dot_size):
-        f, ax = plt.subplots()
-        x = np.array(dataview_df[x_variable])
-        y = np.array(dataview_df[y_variable])
-        ax.scatter(x, y)
-        ax.set_xlabel(x_variable)
-        ax.set_ylabel(y_variable)
-        ax.set_title(x_variable + 'vs.' + y_variable + 'Scatterplot')
-        #ax.set_xlim(-0.025, 1.01*max(x))
-        #ax.set_ylim(-0.025, 1.01*max(y))
-        ax.grid(True)
-        fig_html = mpld3.fig_to_html(fig)
+    def scatterplot(self, dataview_df, x_variable, y_variable=None, dot_size=50):
+        if y_variable is not None:
+            fig, ax = plt.subplots()
+            x = np.array(dataview_df[x_variable])
+            y = np.array(dataview_df[y_variable])
+            ax.scatter(x, y, s=dot_size)
+            ax.set_xlabel(x_variable)
+            ax.set_ylabel(y_variable)
+            ax.set_title(x_variable + 'vs.' + y_variable + 'Scatterplot')
+            ax.set_xlim(-0.025, 1.01*max(x))
+            ax.set_ylim(-0.025, 1.01*max(y))
+            ax.grid(True)
+            fig_html = mpld3.fig_to_html(fig)
+        else:
+            fig_html = "Error: No y variable was provided."
         return fig_html

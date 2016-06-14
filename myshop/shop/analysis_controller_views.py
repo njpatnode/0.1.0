@@ -29,13 +29,14 @@ def result_handler(trigger_controller_id, current_controller_values_json):
     # Set up context
     #current_controller_values_json = str(current_controller_values_json)
     #parsed_json = json.loads(current_controller_values_json)
+    panel = trigger_controller.panel
     keyword_args = {}
     for controller_id in current_controller_values_json.keys():
         controller_pk = strip_controller_id(controller_id)
         controller = get_object_or_404(Controller, pk=controller_pk)
-        controller_variable = controller.variable
-        keyword_args[controller_variable] = current_controller_values_json[controller_id]
-    panel = trigger_controller.panel
+        if controller.panel.pk == panel.pk:
+            controller_variable = controller.variable
+            keyword_args[controller_variable] = current_controller_values_json[controller_id]
     result_function_name = panel.result_function_name
     dataview = panel.accordion.analysis.data_view
     dataview_df = pd.read_pickle('dataview/{}'.format(dataview.id))
