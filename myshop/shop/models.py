@@ -1,6 +1,5 @@
 from django.db import models
 from django.core.urlresolvers import reverse
-from mptt.models import MPTTModel, TreeForeignKey
 from multiselectfield import MultiSelectField
 import pandas as pd
 

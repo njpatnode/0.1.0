@@ -40,8 +40,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'shop',
     'jquery_ui',
-    'mptt',
-    'django_ajax',
     'multiselectfield',
     'import_export',
     'django_pandas',
