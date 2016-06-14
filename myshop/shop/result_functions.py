@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 import mpld3
 import seaborn as sns
 import numpy as np
+import pandas as pd
+import 
 
 ### function class ####
 class result_function(object):
@@ -39,6 +41,7 @@ class result_function(object):
         if y_variable is not None:
             from sklearn.linear_model import Lasso
             import seaborn as sns
+            x_variables = dataview.df[[x_variables]]
             fig, ax = plt.subplots()
             lrg = Lasso(alpha = alpha_value)
             l_train, l_test, j_train, j_test = train_test_split(x_variables, dataview.df[y_variable], test_size = test_split)
@@ -59,6 +62,7 @@ class result_function(object):
         if y_variable is not None:   
             from sklearn.linear_model import Ridge
             import seaborn as sns
+            x_variables = dataview.df[[x_variables]]
             fig, ax = plt.subplots()
             rdg = Ridge(alpha = alpha_value)
             r_train, r_test, s_train, s_test = train_test_split(x_variables, dataview.df[y_variable], test_size = test_split)
@@ -86,6 +90,7 @@ class result_function(object):
             from sklearn.cross_validation import train_test_split
             from sklearn.metrics import r2_score
             from sklearn import metrics
+            x_variables = dataview.df[[x_variables]]
             fig, ax = plt.subplots()
             x_train, x_test, y_train, y_test = train_test_split(x_variables, dataview.df[y_variable], test_size=test_split)
             regr = LinearRegression()
@@ -98,6 +103,39 @@ class result_function(object):
             ax.set_ylim(-0.05,)
             rsquared = str(r2_score(y_test,y_pred))
             ax.set_title('Linear Regression \n R^2 score: ' + rsquared)
+            fig_html = mpld3.fig_to_html(fig)
+        else:
+            fig_html = "Error: No y variable was provided."           
+        return fig_html
+    def log_reg(self, dataview.df, x_variables, y_variable, test_split=0.2, weights=6):
+        if y_variable is not None:
+            from sklearn import svm
+            from sklearn.linear_model import LogisticRegression
+            from sklearn.cross_validation import train_test_split
+            from sklearn.metrics import roc_curve, auc, roc_auc_score, matthews_corrcoef
+            from sklearn import metrics
+            x_variables = dataview.df[[x_variables]]
+            fig, ax = plt.subplots()
+            x_train, x_test, y_train, y_test = train_test_split(x_variables, dataview.df[y_variable], test_size= test_split)
+            regr = LogisticRegression(class_weight={0:1,1:weights})
+            regr.fit(x_train,y_train)
+            y_pred = regr.predict(x_test)
+            tb = pd.crosstab(y_test, y_pred)
+            fpr = dict()
+            tpr = dict()
+            roc_auc = dict()
+            fpr, tpr, _ = roc_curve(y_test, y_pred)
+            roc_auc = auc(fpr,tpr)
+            roc_score = roc_auc_score(y_test, y_pred)
+            ax.figure()
+            ax.plot(fpr,tpr,label='ROC Curve (area = %0.2f)' %roc_auc)
+            ax.plot([0,1],[0,1])
+            ax.set_xlim([0,1])
+            ax.set_ylim([0,1.05])
+            ax.set_xlabel('False Positive Rate')
+            ax.set_ylabel('True Positive Rate')
+            ax.set_title('Claims ROC Curve \n ROC Score:' + roc_score)
+            ax.legend(loc="lower right")
             fig_html = mpld3.fig_to_html(fig)
         else:
             fig_html = "Error: No y variable was provided."           
