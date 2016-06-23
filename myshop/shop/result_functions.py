@@ -5,6 +5,7 @@ import mpld3
 import seaborn as sns
 import numpy as np
 import pandas as pd
+import datetime
 from sklearn.linear_model import LogisticRegression, LinearRegression, Lasso, Ridge
 from sklearn.cross_validation import train_test_split
 from sklearn.metrics import roc_curve, auc, roc_auc_score, r2_score
@@ -123,4 +124,19 @@ class result_function(object):
             fig_html = mpld3.fig_to_html(fig)
         else:
             fig_html = "Error: No y variable was provided."           
+        return fig_html
+    def timeseries(self, dataview_df, date_columns, input_columns, output_variable):
+        ip_input2 = pd.DataFrame(dataview_df)
+        ip_input = ip_input2.loc[ip_input2['BEN_ID'] == dataview_df[[input_columns]]]
+        ip_input = pd.DataFrame(dataview_df[[input_columns]])
+        ip_input[output_variable] = pd.to_numeric(dataview_df[[output_variable]])
+        ip_input['date'] = dataview_df[[date_columns]]
+        ip_input = ip_input2.sort_values(by='date', kind = 'mergesort')
+        ip_input['date'] = pd.to_datetime(dataview_df[[date_columns]], format='%Y%m%d')
+        x = ip_input['date']
+        y = ip_input[output_variable]
+        fig, ax = plt.subplots()
+        ax.set_title(output_variable + 'Time Series')
+        ax.plot(x,y, linestyle = 'None', marker = '8')
+        fig_html = mpld3.fig_to_html(fig)
         return fig_html
