@@ -96,11 +96,11 @@ class result_function(object):
         else:
             fig_html = "Error: No y variable was provided."           
         return fig_html
-    def log_reg(self, dataview.df, x_variables, y_variable, test_split=0.2, weights=6):
+    def log_reg(self, dataview.df, x_variables, y_variable, test_split=2, weights=6):
         if y_variable is not None:
             x_variables = dataview.df[[x_variables]]
             fig, ax = plt.subplots()
-            x_train, x_test, y_train, y_test = train_test_split(x_variables, dataview.df[y_variable], test_size= test_split)
+            x_train, x_test, y_train, y_test = train_test_split(x_variables, dataview.df[y_variable], test_size= (int(test_split)/10))
             regr = LogisticRegression(class_weight={0:1,1:weights})
             regr.fit(x_train,y_train)
             y_pred = regr.predict(x_test)
