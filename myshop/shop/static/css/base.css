@@ -318,3 +318,5 @@ ul.errorlist {
 .ui-widget { font-family: Trebuchet MS, Tahoma, Verdana,
     Arial, sans-serif;
     font-size: 11px}
+
+.ui-widget-content.ui-widget-selectee.ui-selected li { background: #F39814; color: blue; }

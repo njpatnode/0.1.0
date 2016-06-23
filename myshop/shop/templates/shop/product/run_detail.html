@@ -51,16 +51,16 @@
                                         {% elif controller.type = "single_dropdown" %}
                                             <div id="controller_label_{{ controller.id}}" style="border:0; color:#f6931f; font-weight:bold;">{{ controller.variable }}</div>
                                             <br>
-                                            <select id="controller_{{ controller.id }}" class="singledropdown-controller" style="font-size:5px !important;">
+                                            <select id="controller_{{ controller.id }}" class="singledropdown-controller">
                                             {% for column in dataview_df.columns %}
                                                 <option value="{{ column }}">{{ column }}</option>
                                             {% endfor %}
                                             </select>
                                             <br>
-                                        {% elif controller.type = "multi_dropdown" %}
+                                        {% elif controller.type = "multiple_dropdown" %}
                                             <div id="controller_label_{{ controller.id }}" style="border:0; color:#f6931f; font-weight:bold;">{{ controller.variable }}</div>
                                             <br>
-                                            <select id="controller_{{ controller.id }}" class="multidropdown-controller" style="font-size:5px !important;">
+                                            <select multiple id="controller_{{ controller.id }}" data-placeholder="Choose {{ controller.variable }}" class="chosen-select multiple-dropdown-controller">
                                             {% for column in dataview_df.columns %}
                                                 <option value="{{ column }}">{{ column }}</option>
                                             {% endfor %}
@@ -115,10 +115,25 @@
                                                     }
                         
                                                     });
+            {% elif controller.type = 'multiple_dropdown' %}
+                    $( '#controller_{{ controller.id }}' ).selectable({
+                                                        stop: function(event, data){
+                                                        $( '#controller_label_{{ controller.id }}' ).html( '{{ controller.variable }}'.concat(": ", $( this ).val()) );
+                                                        $.ajax({
+                                                               url: "{% url 'shop:ajax_handler' controller.id %}",
+                                                               data: createJSON(),
+                                                               success: function(result){
+                                                               $( "#panel_result_{{ controller.panel.id }}" ).html( result );
+                                                               }
+                                                               });
+                                                        }
+                                                        
+                                                        });
             {% endif %}
       {% endfor %}
       //result = Viz('digraph Tree { node [shape=box]; 0 [label="X[1] <= 0.5\nentropy = 0.2724\nsamples = 66773\nvalue = [63652, 3121]"] ; 1 [label="X[2] <= 0.5\nentropy = 0.2706\nsamples = 66741\nvalue = [63649, 3092]"] ; 0 -> 1 [labeldistance=2.5, labelangle=45, headlabel="True"] ;}');
       //$( '#test_viz' ).html( result );
+      $(".chosen-select").chosen();
     });
 </script>
 <script>
@@ -141,6 +156,11 @@ function createJSON() {
         jsonObj[id]=value;
     });
     $(".singledropdown-controller").each(function() {
+        var id = $(this).attr("id");
+        var value = $(this).val();
+        jsonObj[id]=value;
+    });
+    $(".multiple-dropdown-controller").each(function() {
         var id = $(this).attr("id");
         var value = $(this).val();
         jsonObj[id]=value;
