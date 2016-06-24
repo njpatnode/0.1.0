@@ -60,3 +60,9 @@ class data_transformations(object):
         pca = PCA(n_components = int(components))
         output = pca.fit_transform(x)
         return output
+    def sortvalues(self, dataview_df, variables):
+        z = pd.DataFrame(dataview_df[[variable]])
+        output = z.sort_values(variables, 0)
+        return output
+        
+        
