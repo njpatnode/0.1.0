@@ -8,6 +8,7 @@ import pandas as pd
 from sklearn.linear_model import LogisticRegression, LinearRegression, Lasso, Ridge
 from sklearn.cross_validation import train_test_split
 from sklearn.metrics import roc_curve, auc, roc_auc_score, r2_score
+from sklearn.tree import DecisionTreeRegressor
 
 ### function class ####
 class result_function(object):
@@ -120,6 +121,25 @@ class result_function(object):
             ax.set_ylabel('True Positive Rate')
             ax.set_title('Claims ROC Curve \n ROC Score:' + roc_score)
             ax.legend(loc="lower right")
+            fig_html = mpld3.fig_to_html(fig)
+        else:
+            fig_html = "Error: No y variable was provided."           
+        return fig_html
+    def tree_reg(self, dataview.df, x_variables, y_variable=None, test_split=0.2, tree_depth=10):
+        if y_variable is not None:
+            x_variables = dataview.df[[x_variables]]
+            fig, ax = plt.subplots()
+            x_train, x_test, y_train, y_test = train_test_split(x_variables, dataview.df[y_variable], test_size=test_split)
+            regr = DecisionTreeRegressor(max_depth=tree_depth)
+            regr.fit(x_train, y_train)
+            y_pred = regr.predict(x_test)
+            ax = sns.regplot(y_test, y_pred, ci=None)
+            ax.set_xlabel('Predicted Test Data')
+            ax.set_ylabel('Input Test Data')
+            ax.set_xlim(-0.05,)
+            ax.set_ylim(-0.05,)
+            rsquared = str(r2_score(y_test,y_pred))
+            ax.set_title('Tree Regression \n R^2 score: ' + rsquared)
             fig_html = mpld3.fig_to_html(fig)
         else:
             fig_html = "Error: No y variable was provided."           
